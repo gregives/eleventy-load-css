@@ -1,0 +1,17 @@
+{
+  "name": "eleventy-load-sass",
+  "version": "0.0.1",
+  "description": "Sass loader for Eleventy using eleventy-load",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/gregives/eleventy-load-sass",
+  "author": "Greg Ives",
+  "license": "MIT",
+  "dependencies": {
+    "css": "^3.0.0",
+    "detective-postcss": "^3.0.1",
+    "is-url": "^1.2.4"
+  }
+}
