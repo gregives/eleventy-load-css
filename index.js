@@ -1,42 +1,90 @@
-const css = require("css");
-const detective = require("detective-postcss");
-const isUrl = require("is-url");
+const { parse } = require("postcss");
+const { parse: parseValue } = require("postcss-values-parser");
 
-// Define import string
-const IMPORT = "@import";
+module.exports = async function (
+  content,
+  options = { import: true, url: true }
+) {
+  const root = parse(content);
+  dependencies = [];
 
-module.exports = async function (content, options = {}) {
-  const imports = css
-    .parse(content)
-    .stylesheet.rules.filter((rule) => rule.type === "import");
-
-  const parsed = content.split("\n");
-
-  for (const rule of imports) {
-    const [file] = detective(`${IMPORT} ${rule.import}`, { url: true });
-
-    if (file && !isUrl(file)) {
-      const {
-        position: { start, end },
-      } = rule;
-
-      // Ignore imports over multiple lines for now
-      if (start.line !== end.line)
-        throw new Error("Imports over multiple lines are not handled yet");
-
-      // Position is 1-indexed
-      const line = start.line - 1;
-
-      // Replace import with return of dependency
-      parsed[line] = [
-        parsed[line].slice(0, start.column + IMPORT.length),
-        parsed[line]
-          .slice(start.column + IMPORT.length, end.column)
-          .replace(file, await this.addDependency(file)),
-        parsed[line].slice(end.column),
-      ].join("");
-    }
+  if (options.import) {
+    root.walkAtRules((rule) => {
+      if (rule.name === "import") {
+        const value = parseValue(rule.params);
+        const {
+          nodes: [source],
+        } = value;
+        if (source.type === "quoted") {
+          dependencies.push({
+            rule,
+            replace: (rule, dependency) => {
+              source.value = `${source.quote}${dependency}${source.quote}`;
+              rule.params = value.toString();
+            },
+            source: source.value.slice(1, -1),
+          });
+        } else if (source.type === "func" && source.name === "url") {
+          const {
+            nodes: [first],
+          } = source;
+          if (first.type === "quoted") {
+            dependencies.push({
+              rule,
+              replace: (rule, dependency) => {
+                first.value = `${first.quote}${dependency}${first.quote}`;
+                rule.params = value.toString();
+              },
+              source: first.value.slice(1, -1),
+            });
+          } else {
+            dependencies.push({
+              rule,
+              replace: (rule, dependency) => {
+                rule.params = `url(${dependency})`;
+              },
+              source: source.params.slice(1, -1),
+            });
+          }
+        }
+      }
+    });
   }
 
-  return parsed.join("\n");
+  if (options.url) {
+    root.walkDecls((decl) => {
+      const value = parseValue(decl.value);
+      value.nodes.forEach((node) => {
+        if (node.type === "func" && node.name === "url") {
+          const {
+            nodes: [first],
+          } = node;
+          if (first.type === "quoted") {
+            dependencies.push({
+              rule: decl,
+              replace: (rule, dependency) => {
+                first.value = `${first.quote}${dependency}${first.quote}`;
+                rule.value = value.toString();
+              },
+              source: first.value.slice(1, -1),
+            });
+          } else {
+            dependencies.push({
+              rule: decl,
+              replace: (rule, dependency) => {
+                rule.value = `url(${dependency})`;
+              },
+              source: node.params.slice(1, -1),
+            });
+          }
+        }
+      });
+    });
+  }
+
+  for (const { rule, replace, source } of dependencies) {
+    replace(rule, await this.addDependency(source));
+  }
+
+  return root.toResult().css;
 };
