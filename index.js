@@ -1,9 +1,10 @@
 const { parse } = require("postcss");
 const { parse: parseValue } = require("postcss-values-parser");
+const CleanCSS = require("clean-css");
 
 module.exports = async function (
   content,
-  options = { import: true, url: true }
+  options = { import: true, url: true, minimize: true }
 ) {
   const root = parse(content);
   dependencies = [];
@@ -84,6 +85,12 @@ module.exports = async function (
 
   for (const { rule, replace, source } of dependencies) {
     replace(rule, await this.addDependency(source));
+  }
+
+  if (options.minimize) {
+    return new CleanCSS({
+      inline: false,
+    }).minify(root.toResult().css).styles;
   }
 
   return root.toResult().css;
