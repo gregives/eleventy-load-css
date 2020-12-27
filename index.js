@@ -1,3 +1,4 @@
+const path = require("path");
 const { parse } = require("postcss");
 const { parse: parseValue } = require("postcss-values-parser");
 const CleanCSS = require("clean-css");
@@ -84,7 +85,8 @@ module.exports = async function (
   }
 
   for (const { rule, replace, source } of dependencies) {
-    replace(rule, await this.addDependency(source));
+    const resource = path.join(path.dirname(this.resourcePath), source);
+    replace(rule, await this.addDependency(resource));
   }
 
   if (options.minimize) {
