@@ -5,11 +5,12 @@ const CleanCSS = require("clean-css");
 
 module.exports = async function (
   content,
-  options = { import: true, url: true, minimize: true }
+  options = { import: true, url: true, minimize: false }
 ) {
   const root = parse(content);
   dependencies = [];
 
+  // Add @import rules as dependencies
   if (options.import) {
     root.walkAtRules((rule) => {
       if (rule.name === "import") {
@@ -18,6 +19,7 @@ module.exports = async function (
           nodes: [source],
         } = value;
         if (source.type === "quoted") {
+          // @import "dependency.css"
           dependencies.push({
             rule,
             replace: (rule, dependency) => {
@@ -31,6 +33,7 @@ module.exports = async function (
             nodes: [first],
           } = source;
           if (first.type === "quoted") {
+            // @import url("dependency.css")
             dependencies.push({
               rule,
               replace: (rule, dependency) => {
@@ -40,6 +43,7 @@ module.exports = async function (
               source: first.value.slice(1, -1),
             });
           } else {
+            // @import url(dependency.css)
             dependencies.push({
               rule,
               replace: (rule, dependency) => {
@@ -53,6 +57,7 @@ module.exports = async function (
     });
   }
 
+  // Add url() declarations as dependencies
   if (options.url) {
     root.walkDecls((decl) => {
       const value = parseValue(decl.value);
@@ -62,6 +67,7 @@ module.exports = async function (
             nodes: [first],
           } = node;
           if (first.type === "quoted") {
+            // url("dependency.jpeg")
             dependencies.push({
               rule: decl,
               replace: (rule, dependency) => {
@@ -71,6 +77,7 @@ module.exports = async function (
               source: first.value.slice(1, -1),
             });
           } else {
+            // url(dependency.jpeg)
             dependencies.push({
               rule: decl,
               replace: (rule, dependency) => {
@@ -84,14 +91,17 @@ module.exports = async function (
     });
   }
 
+  // Await dependencies and call replace functions to modify CSS
   for (const { rule, replace, source } of dependencies) {
     const resource = path.join(path.dirname(this.resourcePath), source);
     replace(rule, await this.addDependency(resource));
   }
 
+  // Minimize CSS using CleanCSS
   if (options.minimize) {
     return new CleanCSS({
       inline: false,
+      ...options.minimize,
     }).minify(root.toResult().css).styles;
   }
 
