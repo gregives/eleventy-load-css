@@ -3,10 +3,9 @@ const { parse } = require("postcss");
 const { parse: parseValue } = require("postcss-values-parser");
 const CleanCSS = require("clean-css");
 
-module.exports = async function (
-  content,
-  options = { import: true, url: true, minimize: false }
-) {
+module.exports = async function (content, _options) {
+  const options = { import: true, url: true, minimize: true, ..._options };
+
   const root = parse(content);
   dependencies = [];
 
