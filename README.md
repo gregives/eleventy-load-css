@@ -132,11 +132,11 @@ If `true` or an `Object`, eleventy-load-css will minimize CSS using [CleanCSS](h
 
 <!-- References -->
 
-[npm-version-src]: https://img.shields.io/npm/v/eleventy-load/latest.svg
-[npm-version-href]: https://npmjs.com/package/eleventy-load
-[npm-downloads-src]: https://img.shields.io/npm/dt/eleventy-load.svg
-[npm-downloads-href]: https://npmjs.com/package/eleventy-load
-[license-src]: https://img.shields.io/npm/l/eleventy-load.svg
-[license-href]: https://npmjs.com/package/eleventy-load
+[npm-version-src]: https://img.shields.io/npm/v/eleventy-load-css/latest.svg
+[npm-version-href]: https://npmjs.com/package/eleventy-load-css
+[npm-downloads-src]: https://img.shields.io/npm/dt/eleventy-load-css.svg
+[npm-downloads-href]: https://npmjs.com/package/eleventy-load-css
+[license-src]: https://img.shields.io/npm/l/eleventy-load-css.svg
+[license-href]: https://npmjs.com/package/eleventy-load-css
 [prettier-src]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg
 [prettier-href]: https://github.com/prettier/prettier
