@@ -1,12 +1,12 @@
 {
-  "name": "eleventy-load-sass",
+  "name": "eleventy-load-css",
   "version": "0.0.1",
-  "description": "Sass loader for Eleventy using eleventy-load",
+  "description": "Find dependencies in and minify CSS using eleventy-load",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "https://github.com/gregives/eleventy-load-sass",
+  "repository": "https://github.com/gregives/eleventy-load-css",
   "author": "Greg Ives",
   "license": "MIT",
   "dependencies": {
