@@ -9,39 +9,13 @@ Find dependencies in and minify CSS using [eleventy-load](https://github.com/gre
 
 ## Getting Started
 
-Firstly, you'll need to install [eleventy-load](https://github.com/gregives/eleventy-load) (if you haven't already) and eleventy-load-css.
+Firstly, you'll need to install [eleventy-load](https://github.com/gregives/eleventy-load) (if you haven't already) and eleventy-load-css. You'll probably want to use eleventy-load-css in combination with [eleventy-load-html](https://github.com/gregives/eleventy-load-html) and [eleventy-load-file](https://github.com/gregives/eleventy-load-file), so we'll install those as well.
 
 ```sh
-npm install --save-dev eleventy-load eleventy-load-css
+npm install --save-dev eleventy-load eleventy-load-css eleventy-load-html eleventy-load-file
 ```
 
 Then you can set up eleventy-load-css using a rule in your eleventy-load options.
-
-```js
-module.exports = function (eleventyConfig) {
-  eleventyConfig.addPlugin(require("eleventy-load"), {
-    rules: [
-      {
-        test: /\.css$/,
-        loaders: [
-          {
-            loader: require("eleventy-load-css"),
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-      },
-    ],
-  });
-};
-```
-
-Although you'll probably want to set up eleventy-load-css in combination with [eleventy-load-html](https://github.com/gregives/eleventy-load-html) and [eleventy-load-file](https://github.com/gregives/eleventy-load-file).
-
-```sh
-npm install --save-dev eleventy-load-html eleventy-load-file
-```
 
 ```js
 module.exports = function (eleventyConfig) {
