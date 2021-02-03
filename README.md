@@ -59,11 +59,11 @@ Now that you've set up eleventy-load-css, you can reference a CSS file from an H
 
 ## Options
 
-| Name                        | Type              | Default | Description                                                         |
-| --------------------------- | ----------------- | ------- | ------------------------------------------------------------------- |
-| [**`url`**](#url)           | `Boolean`         | `true`  | Processes `url` dependencies                                        |
-| [**`import`**](#import)     | `Boolean`         | `true`  | Processes `@import` dependencies                                    |
-| [**`minimize`**](#minimize) | `Boolean\|Object` | `false` | Options for [CleanCSS](https://github.com/jakubpawlowicz/clean-css) |
+| Name                        | Type              | Default | Description                                                            |
+| --------------------------- | ----------------- | ------- | ---------------------------------------------------------------------- |
+| [**`url`**](#url)           | `Boolean`         | `true`  | Processes `url` dependencies                                           |
+| [**`import`**](#import)     | `Boolean`         | `true`  | Processes `@import` dependencies                                       |
+| [**`minimize`**](#minimize) | `Boolean\|Object` | `false` | Minimize using [CleanCSS](https://github.com/jakubpawlowicz/clean-css) |
 
 ### `url`
 
