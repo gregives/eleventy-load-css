@@ -67,7 +67,7 @@ Now that you've set up eleventy-load-css, you can reference a CSS file from an H
 
 ### `url`
 
-Type: `Boolean` Default: `true`.
+Type: `Boolean` Default: `true`
 
 If `true`, processes `url` functions as eleventy-load dependencies.
 
