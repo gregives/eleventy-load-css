@@ -1,6 +1,6 @@
 {
   "name": "eleventy-load-css",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Find dependencies in and minify CSS using eleventy-load",
   "main": "index.js",
   "scripts": {
