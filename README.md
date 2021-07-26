@@ -59,17 +59,21 @@ Now that you've set up eleventy-load-css, you can reference a CSS file from an H
 
 ## Options
 
-| Name                        | Type              | Default | Description                                                            |
-| --------------------------- | ----------------- | ------- | ---------------------------------------------------------------------- |
-| [**`url`**](#url)           | `Boolean`         | `true`  | Processes `url` dependencies                                           |
-| [**`import`**](#import)     | `Boolean`         | `true`  | Processes `@import` dependencies                                       |
-| [**`minimize`**](#minimize) | `Boolean\|Object` | `false` | Minimize using [CleanCSS](https://github.com/jakubpawlowicz/clean-css) |
+| Name                        | Type                | Default | Description                                                            |
+| --------------------------- | ------------------- | ------- | ---------------------------------------------------------------------- |
+| [**`url`**](#url)           | `Boolean\|Function` | `true`  | Processes `url` dependencies                                           |
+| [**`import`**](#import)     | `Boolean`           | `true`  | Processes `@import` dependencies                                       |
+| [**`minimize`**](#minimize) | `Boolean\|Object`   | `false` | Minimize using [CleanCSS](https://github.com/jakubpawlowicz/clean-css) |
 
 ### `url`
 
-Type: `Boolean` Default: `true`
+Type: `Boolean|Function` Default: `true`
 
 If `true`, processes `url` functions as eleventy-load dependencies.
+
+If `Function`, calls the provided function to resolve the path of the dependency first, with an object containing the following:
+- `resourcePath`: the path of the resource currently being processed
+- `source`: the path of the resource in the `url`
 
 ```scss
 // eleventy-load will process cat.jpg if `url` is true
