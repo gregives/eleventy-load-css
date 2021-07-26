@@ -90,9 +90,14 @@ module.exports = async function (content, _options = {}) {
     });
   }
 
+  const _resolve = ({ resourcePath, source }) =>
+    path.join(path.dirname(resourcePath), source);
+  const resolve = typeof options.url === "function" ? options.url : _resolve;
+  
   // Await dependencies and call replace functions to modify CSS
   for (const { rule, replace, source } of dependencies) {
-    const resource = path.join(path.dirname(this.resourcePath), source);
+    const config = { resourcePath: this.resourcePath, source };
+    const resource = resolve(config) || _resolve(config);
     replace(rule, await this.addDependency(resource));
   }
 
